@@ -1,0 +1,7 @@
+Item,Amount,Outgoing Date,Renewal Date,Essential,Payment Method,Payment Frequency,Type
+Household,20,30,N/A,True,Bank Transfer,True,Expense
+Gifts,45,30,N/A,True,Bank Transfer,True,Expense
+Wage,1600,31,N/A,True,Bank Transfer,True,Income
+Saving,400,1,N/A,True,Bank Transfer,True,Saving
+Sword,100,1,N/A,True,Cash,False,Expense
+Clothes,100,1,N/A,True,Card,True,Expense
