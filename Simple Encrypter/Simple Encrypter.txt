@@ -1,0 +1,84 @@
+import random
+import string
+import os
+import json
+
+file_location_directory = os.path.dirname(__file__)
+
+encryption = []
+code = set()
+unique_code = []
+
+letters = list(string.ascii_letters)
+nums = list(str(range(0, 9)))
+sp_chars = list(".?~#[-$&!]+$%*}~_@=+{ ")
+unique_chars = set()
+encryption.extend(letters)
+encryption.extend(nums)
+encryption.extend(sp_chars)
+
+
+def encrypted(msg):
+    cipher = ""
+
+    for i in msg:
+        unique_chars.add(i)
+
+    sort_unique_chars = sorted(unique_chars)
+
+    def unique_code():
+        for _ in range(len(unique_chars)):
+            n = random.sample(encryption, 1)
+            # print(n[0])
+            code.add(n[0])
+
+    unique_code()
+
+    if not len(code) == len(unique_chars):
+        print("Code doesn't match")
+        code.clear()
+        for _ in range(len(unique_chars)):
+            n = random.sample(encryption, 1)
+            code.add(n[0])
+    elif len(code) == len(unique_chars):
+        print("Code matches")
+
+    # Zips together unique_chars and assigns a random
+    # character to it's value
+    hidden_msg = dict(zip(sort_unique_chars, code))
+
+    for l in msg:
+        if l in hidden_msg:
+            cipher += hidden_msg[l]
+        else:
+            unique_code()
+
+    with open(os.path.join(file_location_directory, "encrypt.json"), "w+") as encrypt:
+        encrypt.write(json.dumps(hidden_msg, indent=4))
+        encrypt.seek(0)
+        new_hidden_msg = json.loads(encrypt.read())
+        hidden_msg_rv = dict((v, k) for k, v in new_hidden_msg.items())
+        decrypt = ""
+
+        for _ in cipher:
+            if _ in cipher:
+                decrypt += hidden_msg_rv[_]
+            else:
+                unique_code()
+
+        if not len(cipher) == len(msg):
+            print("Not equal")
+            encrypted(msg)
+        else:
+            pass
+
+            print("\n")
+            print(f"Encrypted:\n{cipher}")
+            print("\n")
+            print(f"Decrypted:\n{decrypt}")
+            encrypt.close()
+
+
+message = input("Encrypt this message: ")
+
+encrypted(message)
